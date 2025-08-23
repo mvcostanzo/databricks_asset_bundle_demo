@@ -1,0 +1,12 @@
+[project]
+name = "cdc-dlt-extract"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "boto3>=1.39.11",
+    "dlt[databricks,s3]>=1.15.0",
+    "enlighten>=1.14.1",
+    "s3fs>=2025.7.0",
+]

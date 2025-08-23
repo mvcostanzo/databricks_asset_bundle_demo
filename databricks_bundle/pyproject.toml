@@ -1,0 +1,12 @@
+[project]
+name = "databricks-bundle"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "cdc-dlt-extract",
+]
+
+[tool.uv.sources]
+cdc-dlt-extract = { workspace = true }
