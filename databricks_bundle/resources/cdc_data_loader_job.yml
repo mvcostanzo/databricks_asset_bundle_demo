@@ -9,13 +9,6 @@ resources:
           unit: WEEKS
 
       tasks:
-        - task_key: load_cdc_data
-          environment_key: default
-          python_wheel_task:
-            package_name: cdc_dlt_extract     
-            entry_point: cdc_data_pipeline.load_cdc_data
-
-
         - task_key: mock_data
           environment_key: default
           python_wheel_task:
@@ -33,4 +26,3 @@ resources:
             environment_version: "4"
             dependencies:
               - ../mock_data/dist/*.whl
-              - ../cdc_dlt_extract/dist/*.whl

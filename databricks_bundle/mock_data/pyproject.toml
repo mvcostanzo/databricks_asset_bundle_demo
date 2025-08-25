@@ -1,5 +1,5 @@
 [project]
-name = "mock_data"
+name = "mock-data"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"

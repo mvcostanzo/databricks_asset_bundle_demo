@@ -73,5 +73,5 @@ def load_cdc_data() -> None:
         )
         print(load_info)  # noqa: T201
 
-if __name__ == "__main__":
+def main():
     load_cdc_data()
