@@ -1,9 +1,21 @@
 # This is a Databricks asset bundle definition for cdc_data_loader.
 # See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
 bundle:
-  name: cdc_data_loader
+  name: databricks_bundle
   uuid: f3826ac2-f173-4886-937e-28408899b5b7
 
+artifacts:
+  cdc_dlt_extract_wheel:
+    type: whl
+    path: ./cdc_dlt_extract
+    build: "uv build --wheel --package cdc_dlt_extract --out-dir cdc_dlt_extract/dist"
+  
+  mock_data_wheel:
+    type: whl
+    path: ./mock_data
+    build: "uv build --wheel --package mock_data --out-dir mock_data/dist/"
+    
+    
 include:
   - resources/*.yml
   - resources/*/*.yml

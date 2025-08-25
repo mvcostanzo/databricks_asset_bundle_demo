@@ -1,0 +1,36 @@
+resources:
+  jobs:
+    cdc_data_loader_job:
+      name: "CDC Data Loader Job"
+
+      trigger:
+        periodic:
+          interval: 1
+          unit: WEEKS
+
+      tasks:
+        - task_key: load_cdc_data
+          environment_key: default
+          python_wheel_task:
+            package_name: cdc_dlt_extract     
+            entry_point: cdc_data_pipeline.load_cdc_data
+
+
+        - task_key: mock_data
+          environment_key: default
+          python_wheel_task:
+            package_name: mock_data
+            entry_point: main
+
+
+      # A list of task execution environment specifications that can be referenced by tasks of this job.
+      environments:
+        - environment_key: default
+
+          # Full documentation of this spec can be found at:
+          # https://docs.databricks.com/api/workspace/jobs/create#environments-spec
+          spec:
+            environment_version: "4"
+            dependencies:
+              - ../mock_data/dist/*.whl
+              - ../cdc_dlt_extract/dist/*.whl
