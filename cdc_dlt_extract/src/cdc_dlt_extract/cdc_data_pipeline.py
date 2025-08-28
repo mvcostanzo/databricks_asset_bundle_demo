@@ -1,31 +1,13 @@
 from typing import Any, Optional
 
 import dlt
-from dlt.destinations import databricks
+from dlt.destinations import filesystem
 from dlt.sources.rest_api.typing import RESTAPIConfig, OffsetPaginatorConfig
 from dlt.sources.rest_api.utils import check_connection
 from dlt.sources.rest_api import (
     rest_api_resources,
     rest_api_source,
 )
-import os
-import boto3
-
-# Disable AWS credential chain that tries to use STS
-os.environ['AWS_EC2_METADATA_DISABLED'] = 'true'
-
-session = boto3.Session(
-    aws_access_key_id=dlt.secrets['destination.filesystem.credentials.aws_access_key_id'],
-    aws_secret_access_key=dlt.secrets['destination.filesystem.credentials.aws_secret_access_key'],
-    region_name='wnam'
-)
-
-boto3.setup_default_session(
-    aws_access_key_id=dlt.secrets['destination.filesystem.credentials.aws_access_key_id'],
-    aws_secret_access_key=dlt.secrets['destination.filesystem.credentials.aws_secret_access_key'],
-    region_name='wnam'
-)
-
 
 def build_cdc_config() -> RESTAPIConfig:
     paginator: OffsetPaginatorConfig = {
@@ -47,14 +29,18 @@ def build_cdc_config() -> RESTAPIConfig:
                 "name": "nndss",
                 "endpoint":{
                     "method": "GET",
-                    "path": "x9gk-5huc.json",
-                    "params":{
-                        "sort_order": "{incremental.initial_value}"
-                    },
-                    "incremental": {
-                        "cursor_path": "sort_order",
-                        'initial_value': '20220100001'
-                    },                       
+                    "path": "x9gk-5huc.json"
+                    # TODO: Need to convert this to SoQL query
+                    # Current full load time is about 20 minutes and merge prevents a full overwrite but 
+                    # this can be incrementally loaded with query.
+                    #  
+                    #"params":{
+                    #    "sort_order": "{incremental.initial_value}"
+                    #},
+                    #"incremental": {
+                    #    "cursor_path": "sort_order",
+                    #    'initial_value': '20220100001'
+                    #},                       
                 },
                 "primary_key": "sort_order",
                 "file_format": "parquet"
@@ -72,17 +58,20 @@ def cdc_data_source(access_token: Optional[str] = dlt.secrets.value) -> Any:
 def load_cdc_data() -> None:
     pipeline = dlt.pipeline(
         pipeline_name="load_cdc_data",
-        destination='databricks',
+        destination='filesystem',
         dataset_name="nndss",
         progress="enlighten",
-        pipelines_dir='./dlt_pipelines',
-        staging='filesystem'
+        pipelines_dir='./dlt_pipelines'
     )
 
     can_connect, error_msg = check_connection(cdc_data_source(), "nndss")
     if can_connect:
-        load_info = pipeline.run(cdc_data_source)
+        load_info = pipeline.run(
+            data= cdc_data_source(),
+            loader_file_format="parquet", 
+            write_disposition="merge"
+        )
         print(load_info)  # noqa: T201
 
-if __name__ == "__main__":
+def main():
     load_cdc_data()

@@ -1,0 +1,11 @@
+# The main pipeline for python_dab_sample
+resources:
+  pipelines:
+    nndss_data_pipeline:
+      name: load_nndss_data
+      catalog: health_data
+      schema: nndss
+      serverless: true
+      libraries:
+        - notebook:
+            path: ../notebooks/load_nndss_pipeline.ipynb

@@ -1,14 +1,26 @@
 [project]
-name = "cdc-data-load"
-version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.11"
+name = "cdc_data_load"
+version = "0.0.1"
+authors = [{ name = "mvcostanzo@gmail.com" }]
+requires-python = ">= 3.11"
 dependencies = [
+    "cdc-dlt-extract",
+    "clear-tables",
+    "databricks-bundle",
+    "mock-data",
 ]
 
 [tool.uv.workspace]
 members = [
     "databricks_bundle",
     "cdc_dlt_extract",
+    "databricks_bundle/mock_data",
+    "databricks_bundle/clear_tables",
 ]
+
+[tool.uv.sources]
+databricks-bundle = { workspace = true }
+cdc-dlt-extract = { workspace = true }
+mock-data = { workspace = true }
+clear-tables = { workspace = true }
+

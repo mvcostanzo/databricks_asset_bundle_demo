@@ -1,12 +1,40 @@
 [project]
 name = "databricks-bundle"
-version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.11"
+version = "0.0.1"
+authors = [{ name = "mvcostanzo@gmail.com" }]
+requires-python = ">= 3.11"
 dependencies = [
-    "cdc-dlt-extract",
+    "databricks-connect>=16.1.6",
+    "databricks-dlt>=0.3.0",
+    "pyspark>=3.5.6",
+    "pytest>=8.4.1",
 ]
 
-[tool.uv.sources]
-cdc-dlt-extract = { workspace = true }
+[project.optional-dependencies]
+dev = [
+    "pytest",
+
+    # Code completion support for DLT, also install databricks-connect
+    "databricks-dlt",
+
+    # databricks-connect can be used to run parts of this project locally.
+    # See https://docs.databricks.com/dev-tools/databricks-connect.html.
+    #
+    # Note, databricks-connect is automatically installed if you're using Databricks
+    # extension for Visual Studio Code
+    # (https://docs.databricks.com/dev-tools/vscode-ext/dev-tasks/databricks-connect.html).
+    #
+    # To manually install databricks-connect, uncomment the line below to install a version
+    # of db-connect that corresponds to the Databricks Runtime version used for this project.
+    # See https://docs.databricks.com/dev-tools/databricks-connect.html
+    # "databricks-connect>=15.4,<15.5",
+]
+
+[tool.setuptools]
+packages = ["mock_data", "resources", "clear_tables"]
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+testpaths = [
+    "tests",
+]
