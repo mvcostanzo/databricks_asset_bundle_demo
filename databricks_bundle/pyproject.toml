@@ -6,6 +6,7 @@ requires-python = ">= 3.11"
 dependencies = [
     "databricks-connect>=16.1.6",
     "databricks-dlt>=0.3.0",
+    "pyspark>=3.5.6",
     "pytest>=8.4.1",
 ]
 
@@ -28,6 +29,9 @@ dev = [
     # See https://docs.databricks.com/dev-tools/databricks-connect.html
     # "databricks-connect>=15.4,<15.5",
 ]
+
+[tool.setuptools]
+packages = ["mock_data", "resources", "clear_tables"]
 
 [tool.pytest.ini_options]
 pythonpath = "src"

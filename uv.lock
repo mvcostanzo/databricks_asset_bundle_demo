@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version >= '3.14' and platform_python_implementation != 'PyPy' and sys_platform != 'emscripten'",
@@ -225,8 +225,8 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "cdc-dlt-extract", editable = "cdc_dlt_extract" },
-    { name = "clear-tables", virtual = "databricks_bundle/clear_tables" },
-    { name = "databricks-bundle", virtual = "databricks_bundle" },
+    { name = "clear-tables", editable = "databricks_bundle/clear_tables" },
+    { name = "databricks-bundle", editable = "databricks_bundle" },
     { name = "mock-data", editable = "databricks_bundle/mock_data" },
 ]
 
@@ -357,7 +357,7 @@ wheels = [
 [[package]]
 name = "clear-tables"
 version = "0.1.0"
-source = { virtual = "databricks_bundle/clear_tables" }
+source = { editable = "databricks_bundle/clear_tables" }
 
 [[package]]
 name = "click"
@@ -392,11 +392,13 @@ wheels = [
 [[package]]
 name = "databricks-bundle"
 version = "0.0.1"
-source = { virtual = "databricks_bundle" }
+source = { editable = "databricks_bundle" }
 dependencies = [
     { name = "databricks-connect", version = "16.1.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "databricks-connect", version = "17.1.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "databricks-dlt" },
+    { name = "pyspark", version = "3.5.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "pyspark", version = "4.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "pytest" },
 ]
 
@@ -411,6 +413,7 @@ requires-dist = [
     { name = "databricks-connect", specifier = ">=16.1.6" },
     { name = "databricks-dlt", specifier = ">=0.3.0" },
     { name = "databricks-dlt", marker = "extra == 'dev'" },
+    { name = "pyspark", specifier = ">=3.5.6" },
     { name = "pytest", specifier = ">=8.4.1" },
     { name = "pytest", marker = "extra == 'dev'" },
 ]
@@ -1014,16 +1017,20 @@ source = { editable = "databricks_bundle/mock_data" }
 dependencies = [
     { name = "faker" },
     { name = "ipykernel" },
+    { name = "pandas" },
     { name = "pip" },
     { name = "polars" },
+    { name = "pyarrow" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "faker", specifier = ">=37.5.3" },
     { name = "ipykernel", specifier = ">=6.30.1" },
+    { name = "pandas", specifier = ">=2.3.2" },
     { name = "pip", specifier = ">=25.2" },
     { name = "polars", specifier = ">=1.32.3" },
+    { name = "pyarrow", specifier = ">=21.0.0" },
 ]
 
 [[package]]
@@ -1718,6 +1725,37 @@ sdist = { url = "https://files.pythonhosted.org/packages/b0/77/a5b8c569bf593b014
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c7/21/705964c7812476f378728bdf590ca4b771ec72385c533964653c68e86bdc/pygments-2.19.2-py3-none-any.whl", hash = "sha256:86540386c03d588bb81d44bc3928634ff26449851e99741617ecb9037ee5ec0b", size = 1225217, upload-time = "2025-06-21T13:39:07.939Z" },
 ]
+
+[[package]]
+name = "pyspark"
+version = "3.5.6"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version < '3.12' and platform_python_implementation != 'PyPy' and sys_platform != 'emscripten'",
+    "python_full_version < '3.12' and platform_python_implementation == 'PyPy' and sys_platform != 'emscripten'",
+    "python_full_version < '3.12' and sys_platform == 'emscripten'",
+]
+dependencies = [
+    { name = "py4j", version = "0.10.9.7", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2e/62/36e50d38e5fe158e97cddec983b44f9417b1e205b02320e3c463b5f802fa/pyspark-3.5.6.tar.gz", hash = "sha256:f8b1c4360e41ab398c64904fae08740503bcb6bd389457d659fa6d9f2952cc48", size = 317359167, upload-time = "2025-05-27T08:24:20.82Z" }
+
+[[package]]
+name = "pyspark"
+version = "4.0.0"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.14' and platform_python_implementation != 'PyPy' and sys_platform != 'emscripten'",
+    "python_full_version >= '3.14' and platform_python_implementation == 'PyPy' and sys_platform != 'emscripten'",
+    "python_full_version >= '3.14' and sys_platform == 'emscripten'",
+    "python_full_version >= '3.12' and python_full_version < '3.14' and platform_python_implementation != 'PyPy' and sys_platform != 'emscripten'",
+    "python_full_version >= '3.12' and python_full_version < '3.14' and platform_python_implementation == 'PyPy' and sys_platform != 'emscripten'",
+    "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'emscripten'",
+]
+dependencies = [
+    { name = "py4j", version = "0.10.9.9", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/9d/0e/5b38d51f1b1c2618cccfbf35093268665af9a3bdb493e5a3ecd991def633/pyspark-4.0.0.tar.gz", hash = "sha256:38db1b4f6095a080d7605e578d775528990e66dc326311d93e94a71cfc24e5a5", size = 434132212, upload-time = "2025-05-23T03:29:33.916Z" }
 
 [[package]]
 name = "pytest"

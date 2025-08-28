@@ -1,5 +1,6 @@
 import faker
 import polars as pl
+from pyspark.sql import SparkSession
 
 class GenerateFakeDataset:
     @staticmethod
@@ -16,4 +17,7 @@ class GenerateFakeDataset:
         return pl.DataFrame(dataset)
     
 def main():
-    GenerateFakeDataset.generate_data(25)
+    sparkSession = SparkSession.builder.appName('LoadMockData').getOrCreate()
+    fake_dataset = GenerateFakeDataset.generate_data(10000)
+    spark_df = sparkSession.createDataFrame(fake_dataset.to_pandas())
+    spark_df.write.format("delta").mode('append').saveAsTable('health_data.people.patients')
